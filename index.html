@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captura de Latitude e Longitude</title>
+</head>
+<body>
+    <h1>Captura de Latitude e Longitude</h1>
+
+    <button id="getLocationBtn">Clique para ver sua localização</button>
+
+    <div id="location"></div>
+
+    <script>
+        // Verifique se o botão foi clicado
+        document.getElementById('getLocationBtn').addEventListener('click', function() {
+            // A chamada à API do ipstack com a nova chave
+            fetch('https://api.ipstack.com/check?access_key=ad7c9124ed677ac38d96ed71a4c20998')
+                .then(response => {
+                    // Verifique se a resposta da API foi bem-sucedida
+                    if (!response.ok) {
+                        throw new Error('Erro na API: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Extrair latitude e longitude da resposta
+                    const latitude = data.latitude;
+                    const longitude = data.longitude;
+                    document.getElementById('location').innerHTML = `Sua localização é: Latitude ${latitude}, Longitude ${longitude}`;
+                })
+                .catch(error => {
+                    // Exibir erro caso algo falhe
+                    document.getElementById('location').innerHTML = 'Não foi possível obter a localização.';
+                    console.error('Erro:', error);
+                });
+        });
+    </script>
+</body>
+</html>
